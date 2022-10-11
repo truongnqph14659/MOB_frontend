@@ -11,16 +11,15 @@ import { RegisterComponent } from './Page/register/register.component';
 
 const routes: Routes = [
   {
-    path:'',component:LayoutComponent,children:[
-      { path: '', redirectTo: 'Dashboard', pathMatch: 'full' },
-      {path:'Dashboard',component:DashboardComponent},
-      {path:'Products',component:ProductComponent},
-      {path:'Message',component:MessageComponent},
-      {path:'Statistical',component:StatisticalComponent},
+    path:'admin',component:LayoutComponent,children:[
+      {path:'',component:DashboardComponent},
+      {path:'products',component:ProductComponent},
+      {path:'message',component:MessageComponent},
+      {path:'statistical',component:StatisticalComponent},
     ]
   },
-  { path: 'Login', component:LoginComponent },
-  { path: 'Rgister', component:RegisterComponent },
+  { path: '', component:LoginComponent },
+  { path: 'register', component:RegisterComponent },
   { path: '**', component:NotPageComponent },
 ];
 
