@@ -19,8 +19,14 @@
     "@angular/platform-browser-dynamic": "^14.2.0",
     "@angular/router": "^14.2.0",
     "admin-lte": "3.0",
+    "ng-angular-popup": "^0.2.0",
+    "ng-particles": "^3.3.3",
+    "ngx-spinner": "^14.0.0",
     "rxjs": "~7.5.0",
     "tslib": "^2.3.0",
+    "tsparticles": "^2.3.4",
+    "tsparticles-engine": "^2.3.3",
+    "uninstall": "^0.0.0",
     "zone.js": "~0.11.4"
   },
   "devDependencies": {

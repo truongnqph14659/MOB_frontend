@@ -1,4 +1,6 @@
-import { NgModule } from '@angular/core';
+import { HttpClientModule } from '@angular/common/http';
+import { CUSTOM_ELEMENTS_SCHEMA,NgModule} from '@angular/core';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -15,6 +17,11 @@ import { ContactComponent } from './components/admin/message/contact/contact.com
 import { ChatContainerComponent } from './components/admin/message/chat-container/chat-container.component';
 import { LoginComponent } from './Page/login/login.component';
 import { RegisterComponent } from './Page/register/register.component';
+import { ReactiveFormsModule } from '@angular/forms';
+import {NgToastModule} from 'ng-angular-popup'
+import { NgParticlesModule } from "ng-particles";
+import { NgxSpinnerModule } from "ngx-spinner"
+
 @NgModule({
   declarations: [
     AppComponent,
@@ -30,12 +37,22 @@ import { RegisterComponent } from './Page/register/register.component';
     ContactComponent,
     ChatContainerComponent,
     LoginComponent,
-    RegisterComponent,
+    RegisterComponent
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    ReactiveFormsModule,
+    AppRoutingModule,
+    NgToastModule,
+    NgParticlesModule,
+    HttpClientModule,
+    NgxSpinnerModule,
+    BrowserAnimationsModule,
+  
+
   ],
+
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [],
   bootstrap: [AppComponent]
 })
