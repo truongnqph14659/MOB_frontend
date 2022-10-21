@@ -1,58 +1,51 @@
 import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { BehaviorSubject, Observable, Subject } from 'rxjs';
+import { io, Socket } from 'socket.io-client';
 
 @Injectable({
   providedIn: 'root'
 })
 export class MessageService {
+  API = 'http://localhost:8080/api/Message'
+  public url = 'http://localhost:8080/';
+  private socket: Socket;
+  constructor(private httpRequests:HttpClient) {
+    this.socket = io(this.url, {transports: ['websocket', 'polling', 'flashsocket']})
+   }
+  public count = new Subject<string>()
+  public text = new BehaviorSubject<any>({})
 
-  constructor() { }
-  userList = [
-    {
-      id: "1",
-      name: "huy nguyen",
-      phone: "9876598765",
-      image: "assets/user/user-1.png",
-      roomId: {
-        2: "room-1",
-        3: "room-2",
-        4: "room-3",
-      },
-    },
-    {
-      id: "2",
-      name: "manh nguyen",
-      phone: "9876543210",
-      image: "assets/user/user-2.png",
-      roomId: {
-        1: "room-1",
-        3: "room-4",
-        4: "room-5",
-      },
-    },
-    {
-      id: "3",
-      name: "hai nguyen",
-      phone: "9988776655",
-      image: "assets/user/user-3.png",
-      roomId: {
-        1: "room-2",
-        2: "room-4",
-        4: "room-6",
-      },
-    },
-    {
-      id: "4",
-      name: "hoan nguyen",
-      phone: "9876556789",
-      image: "assets/user/user-4.png",
-      roomId: {
-        1: "room-3",
-        2: "room-5",
-        3: "room-6",
-      },
-    },
-  ];
   getAll(){
-    return this.userList
+    return this.httpRequests.get<any>(`${this.API}/getUser`)
   }
+  getStorage() {
+    const storage = localStorage.getItem('host');
+    return storage ? JSON.parse(storage) : [];
+  }
+  getMessage():Observable<any>{
+    return this.httpRequests.get<any>(`${this.API}/getmsg`)
+  }
+  onMessage(): Observable<any>{
+    return new Observable<{user: string, message: string}>(observer => {
+      this.socket.on('new message', (data) => {
+        observer.next(data);
+      });
+
+      return () => {
+        this.socket.disconnect();
+      }
+    });
+  }
+  sendMessage(data:any){
+    this.socket.emit('message',data)
+    
+  }
+  sendMessageDB(data:any):Observable<any>{
+    return this.httpRequests.post<any>('http://localhost:8080/api/Message/addmsg',data)
+  }
+  joinRoom(id:any){
+    this.socket.emit('join', id);
+  }
+
 }
