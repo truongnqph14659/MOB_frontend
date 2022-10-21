@@ -17,7 +17,7 @@ import { ContactComponent } from './components/admin/message/contact/contact.com
 import { ChatContainerComponent } from './components/admin/message/chat-container/chat-container.component';
 import { LoginComponent } from './Page/login/login.component';
 import { RegisterComponent } from './Page/register/register.component';
-import { ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {NgToastModule} from 'ng-angular-popup'
 import { NgParticlesModule } from "ng-particles";
 import { NgxSpinnerModule } from "ngx-spinner"
@@ -48,7 +48,7 @@ import { NgxSpinnerModule } from "ngx-spinner"
     HttpClientModule,
     NgxSpinnerModule,
     BrowserAnimationsModule,
-  
+    FormsModule
 
   ],
 

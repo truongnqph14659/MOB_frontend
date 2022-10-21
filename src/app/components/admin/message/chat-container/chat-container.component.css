@@ -64,7 +64,12 @@
     display: inline-block;
     position: relative;
   }
-
+  /* .chat .chat-history .message .time{
+    position: absolute;
+    top: 38%;
+    right: -55%;
+    font-size: 13px;
+  } */
   .chat .chat-history .message:after {
     bottom: 100%;
     left: 7%;
@@ -82,7 +87,12 @@
   .chat .chat-history .my-message {
     background: #efefef;
   }
-
+  .chat .chat-history .my-message .time{
+    position: absolute;
+    top: 38%;
+    margin-left: 25px;
+    font-size: 13px;
+  }
   .chat .chat-history .my-message:after {
     bottom: 100%;
     left: 30px;
@@ -101,12 +111,16 @@
     background: #e8f1f3;
     text-align: right;
   }
-
+  .chat .chat-history .other-message .time{
+    position: absolute;
+    top: 38%;
+    right: 112%;
+    font-size: 13px;
+  }
   .chat .chat-history .other-message:after {
     border-bottom-color: #e8f1f3;
-    left: 93%;
+    left: 60%;
   }
-
   .chat .chat-message {
     padding: 20px;
   }
@@ -143,7 +157,9 @@
     clear: both;
     height: 0;
   }
-
+  .chat-history::-webkit-scrollbar {
+    display: none;
+  }
   @media only screen and (min-width: 768px) and (max-width: 992px) {
     .chat-app .chat-list {
       height: 650px;
