@@ -20,13 +20,17 @@ export class CreateComponent implements OnInit {
   touching:boolean=false
   checkSleeping:boolean=true
   checkSupplement:boolean=true
+  checkBathroom:boolean=true
   // proAddress: string = ''
   // proLatitude: string = ''
   // proLongitude: string = ''
   supplements!:any
   sleepingPlaces!:any
+  bathRooms:any
+  yte:boolean=false
   subSupplements:any[]=[]
   subSleepPlaces:any[]=[]
+  subBathrooms:any[]=[]
   categorys!:any
   listAvatars:any[]=[]
   reactiveForm!:FormGroup
@@ -41,6 +45,10 @@ export class CreateComponent implements OnInit {
         place: new FormControl(null,Validators.required),
         Longitude: new FormControl(null,Validators.required),
         Latitude: new FormControl(null,Validators.required),
+        limitPerson: new FormControl(null,Validators.required),
+        content: new FormControl(null,Validators.required),
+        legal: new FormControl(null,Validators.required),
+
     })
     this.httpRequest.getSleepingPlaces().subscribe((data:any)=>{
       this.sleepingPlaces = data.dataSleeping
@@ -52,13 +60,19 @@ export class CreateComponent implements OnInit {
     this.httpRequest.getCategorys().subscribe((data:any)=>{
       this.categorys = data
     })
+    this.httpRequest.getBathrooms().subscribe((data:any)=>{
+      this.bathRooms = data.databaths
+    })
   }
   onsubmit(){
     this.touching=true
     let totalSupplements = 0
     let totalSleepings = 0
+    let totalBathrooms = 0
     const sleepingPlaces = document.querySelectorAll('.sleepingPlaces')
     const supplements = document.querySelectorAll('.supplements')
+    const bathrooms = document.querySelectorAll('.bathrooms')
+    const yte = document.querySelectorAll('.yte')
     const avatars:any = document.querySelector('#avatarInput')
     let idHost:any = localStorage.getItem('host')
         idHost = JSON.parse(idHost).id
@@ -70,6 +84,16 @@ export class CreateComponent implements OnInit {
     supplements.forEach((items:any)=>{
       if(items.checked){
         totalSupplements+=1
+      }
+    })
+    bathrooms.forEach((items:any)=>{
+      if(items.checked){
+        totalBathrooms+=1
+      }
+    })
+    yte.forEach((items:any)=>{
+      if(items.checked){
+        this.yte = items.value
       }
     })
 
@@ -87,7 +111,7 @@ export class CreateComponent implements OnInit {
         this.checkSleeping=true
       }
     }
-    if(!this.reactiveForm.valid || avatars.files.length==0 || totalSleepings==0 || totalSupplements==0){
+    if(!this.reactiveForm.valid || avatars.files.length==0 || totalSleepings==0 || totalSupplements==0 || totalBathrooms==0){
       this.toastr.error({detail:"Notice",summary:"Check!, Your Information is missing.",duration:6000,})
     }else{
           this.spiner.show(undefined,{
@@ -112,6 +136,13 @@ export class CreateComponent implements OnInit {
             })
             }
           })
+          bathrooms.forEach((item:any)=>{
+            if(item.checked){
+            this.httpRequest.getBathroomById({id:item.value}).subscribe((data:any)=>{
+                this.subBathrooms.push(data.dataBaths)
+            })
+            }
+          })
           setTimeout(()=>{
             const dataAddForm = {
               name:this.reactiveForm.get('name')?.value,
@@ -124,6 +155,11 @@ export class CreateComponent implements OnInit {
               category:this.reactiveForm.get('category')?.value,
               opening:this.reactiveForm.get('houropening')?.value,
               ending:this.reactiveForm.get('hourending')?.value,
+              limitPerson:this.reactiveForm.get('limitPerson')?.value,
+              content:this.reactiveForm.get('content')?.value,
+              legal:this.reactiveForm.get('legal')?.value,
+              bathroom:this.subBathrooms,
+              yte:this.yte,
               user:idHost,
               sleepingPlaces:this.subSleepPlaces
             }
@@ -133,6 +169,12 @@ export class CreateComponent implements OnInit {
                   items.checked = false
               })
               supplements.forEach((items:any)=>{
+                items.checked = false
+              })
+              bathrooms.forEach((items:any)=>{
+                items.checked = false
+              })
+              yte.forEach((items:any)=>{
                 items.checked = false
               })
               this.spiner.hide()
@@ -150,12 +192,12 @@ export class CreateComponent implements OnInit {
     }
     return null
   }
-  sleepingkCheckbox(checkBox:any){
+  sleepingCheckbox(checkBox:any){
     if(checkBox.target.checked){
       this.checkSleeping=false
     }
   }
-  supplementkCheckbox(checkBox:any){
+  supplementCheckbox(checkBox:any){
     if(checkBox.target.checked){
       this.checkSupplement=false
     }

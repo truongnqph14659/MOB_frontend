@@ -40,6 +40,12 @@ export class HttpservicesService {
   getSleepById(listIdSleeping:any):Observable<any[]>{
     return this.httpRequests.post<any[]>(`${this.API}/sleepingplaces`,listIdSleeping)
   }
+  getBathrooms():Observable<any[]>{
+    return this.httpRequests.get<any[]>(`${this.API}/bathrooms`)
+  }
+  getBathroomById(listIdBath:any):Observable<any[]>{
+    return this.httpRequests.post<any[]>(`${this.API}/bathrooms`,listIdBath)
+  }
   createPro(dataPro:any):Observable<any[]>{
     return this.httpRequests.post<any[]>(`${this.API}/addProduct`,dataPro)
   }
