@@ -3,6 +3,8 @@ import { RouterModule, Routes } from '@angular/router';
 import { AuthGuard } from './auth.guard';
 import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
 import { MessageComponent } from './components/admin/message/message.component';
+import { CreateComponent } from './components/admin/product/createproducts/create/create.component';
+import { ListComponent } from './components/admin/product/createproducts/list/list.component';
 import { ProductComponent } from './components/admin/product/product.component';
 import { StatisticalComponent } from './components/admin/statistical/statistical.component';
 import { LayoutComponent } from './Page/layout/layout.component';
@@ -14,7 +16,10 @@ const routes: Routes = [
   {
     path:'admin',component:LayoutComponent,canActivate:[AuthGuard],children:[
       {path:'',component:DashboardComponent},
-      {path:'products',component:ProductComponent},
+      {path:'products',component:ProductComponent,children:[
+        {path:'',component:ListComponent},
+        {path:'createpro',component:CreateComponent}
+      ]},
       {path:'Message',component:MessageComponent},
       {path:'statistical',component:StatisticalComponent},
     ]

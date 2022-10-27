@@ -1,3 +1,4 @@
+
 import { HttpClientModule } from '@angular/common/http';
 import { CUSTOM_ELEMENTS_SCHEMA,NgModule} from '@angular/core';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -20,7 +21,10 @@ import { RegisterComponent } from './Page/register/register.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import {NgToastModule} from 'ng-angular-popup'
 import { NgParticlesModule } from "ng-particles";
-import { NgxSpinnerModule } from "ngx-spinner"
+import { NgxSpinnerModule } from "ngx-spinner";
+import { CreateComponent } from './components/admin/product/createproducts/create/create.component';
+import { ListComponent } from './components/admin/product/createproducts/list/list.component'
+
 
 @NgModule({
   declarations: [
@@ -37,7 +41,11 @@ import { NgxSpinnerModule } from "ngx-spinner"
     ContactComponent,
     ChatContainerComponent,
     LoginComponent,
-    RegisterComponent
+    RegisterComponent,
+    ListComponent,
+    RegisterComponent,
+    CreateComponent,
+    
   ],
   imports: [
     BrowserModule,
@@ -49,7 +57,6 @@ import { NgxSpinnerModule } from "ngx-spinner"
     NgxSpinnerModule,
     BrowserAnimationsModule,
     FormsModule
-
   ],
 
   schemas: [CUSTOM_ELEMENTS_SCHEMA],
