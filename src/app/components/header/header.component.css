@@ -1,0 +1,19 @@
+#nav-message{
+    cursor: pointer;
+}
+.active{
+    display: block;
+}
+.media{
+    cursor: pointer;
+    padding: 10px;
+}
+.media:hover{
+    background: rgb(172, 216, 235);
+}
+.dropdown-item-title{
+    color: rgb(60, 58, 58);
+}
+.text-sm{
+    color: rgb(39, 36, 36);
+}

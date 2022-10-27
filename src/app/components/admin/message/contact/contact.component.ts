@@ -1,4 +1,4 @@
-import { Component, OnInit,EventEmitter,Output } from '@angular/core';
+import { Component, OnInit,EventEmitter,Output,ViewChild } from '@angular/core';
 import { MessageService } from 'src/app/service/message.service';
 
 @Component({
@@ -9,36 +9,60 @@ import { MessageService } from 'src/app/service/message.service';
 export class ContactComponent implements OnInit {
   @Output() onNewEvent = new EventEmitter()
   public roomId: string='';
-  public messageText: string=''; //trường lưu  nội dung tin nhắn
-  public messageArray: { fromSelf: boolean; message: string,sender:string}[] = []; //mảng lưu dữ liệu tin nhắn
-  private storageArray = []; //mảng lưu trữ dữ liệu bên trong localStorage
-  a:string = '0'
+  public messageText: string=''; 
+  public messageArray: { fromSelf: boolean; message: string,sender:string}[] = [];
+  public selectedIdUser:string = '0'
   public nameUser = ''
   public showScreen = false;
-  public phone: string=''; //số điện thoại
-  public currentUser:any; // người dùng hiện tại
-  selectedUser:any; //chọn người dùng
+  public currentUser:any; 
+  public selectedUser:any;
   constructor(private MessageService:MessageService) { }
-  listUser:any = [{}]
-  content: string = '';
+  public listUser:any = [{}]
+  public filterUser:any
+  private list:any
   ngOnInit(): void {
     const getAll = this.MessageService.getAll()
     getAll.subscribe((data:any)=>{
       const stoget =this.MessageService.getStorage()
       if (stoget) {
         this.currentUser = data.data.find((user:any) => user._id === stoget.id)
+        // this.listUser = data.data.filter((user:any) => user._id !== stoget.id && user.role == 0)
         this.listUser = data.data.filter((user:any) => user._id !== stoget.id)
-        this.nameUser = this.currentUser.name
+        this.MessageService.nameUser.next(this.currentUser.name)
+        this.MessageService.getMessage().subscribe(data=>{
+          const listSend = data.data.filter((item:any)=>{
+            return item.send === this.currentUser._id ||  item.sendTo === this.currentUser._id&&item.send
+          })
+          const s = data.data.filter((item:any)=>{
+            return item.sendTo === this.currentUser._id&&item.send
+          })
+          this.MessageService.Notifications.next(s)
+          const list = listSend.map((item:any)=>{
+            return item.send
+          })
+          this.filterUser = this.listUser.filter((item:any)=>list.includes(item._id))       
+        })
       }
     })
 
   }
-  selectUserHandler=(id:any)=>{
+  selectUserHandler=(id:any)=>{    
     this.selectedUser = this.listUser.find((user:any) => user._id == id);
     if (this.selectedUser) {
-      this.a = this.selectedUser._id
+      this.selectedIdUser = this.selectedUser._id
+      this.MessageService.idUserSlected.next(this.selectedIdUser)
       const message = this.MessageService.getMessage().subscribe(data=>{
         const responsevice = data.data
+        //status
+          const status = responsevice.filter((item:any)=>item.status == false&&item.user.includes(this.selectedUser._id)&&item.user.includes(this.currentUser._id))
+          console.log('status',status); 
+         if (status.length !== 0) {
+          this.MessageService.sendStatus(status)  
+          this.MessageService.statusMessage(status).subscribe((data:any)=>{
+            console.log(data);
+          })
+         }        
+        //
         const message = responsevice.filter((item:any) => item.user.includes(this.currentUser._id)&&item.user.includes(this.selectedUser._id))
         if (message) {      
           const newMessage = message.map((item:any)=>{
@@ -51,13 +75,11 @@ export class ContactComponent implements OnInit {
           })
           if (newMessage) {
             this.messageArray = newMessage
-            console.log('this.message',this.messageArray);
-            
             this.MessageService.text.next({
               message:this.messageArray,
               User:{...this.selectedUser,showScreen:true}
             })
-          }          
+          }        
         }
       })
     }
