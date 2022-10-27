@@ -1,4 +1,4 @@
-import { Component, OnInit ,Input, ViewChild} from '@angular/core';
+import { Component, OnInit ,Input, ViewChild, ElementRef} from '@angular/core';
 import {io} from 'socket.io-client'
 import { MessageService } from 'src/app/service/message.service';
 @Component({
@@ -7,9 +7,8 @@ import { MessageService } from 'src/app/service/message.service';
   styleUrls: ['./chat-container.component.css']
 })
 export class ChatContainerComponent implements OnInit {
-  @ViewChild('mydiv')mydiv:any;
-
-  constructor(private MessageService:MessageService) { }
+  
+  @ViewChild('mydiv') mydiv:any;
   public selectedUser={
     message:<any>[],
     User:{
@@ -20,12 +19,20 @@ export class ChatContainerComponent implements OnInit {
       showScreen:null
     }
   }
-  currentUser:any
-  roomId:any
+  public name:String=''
+  public currentUser:any
+  public roomId:any
   public messageText:String=''
-  time=new Date(Date.now()).getHours() +":"+new Date(Date.now()).getMinutes()
+  public time=new Date(Date.now()).getHours() +":"+new Date(Date.now()).getMinutes()
   public server = io('http://localhost:8080')
+  constructor(private MessageService:MessageService) { }
   ngOnInit(): void {
+    // this.mydiv.nativeElement.scrollTop=this.mydiv.nativeElement.scrollHeight  
+    this.MessageService.nameUser.subscribe((data)=>{
+      if (data) {
+        this.name = data
+      }
+    })
     this.MessageService.text.subscribe((data:any)=>{
       if (Object.keys(data).length !== 0) {
        this.selectedUser = data
@@ -39,8 +46,8 @@ export class ChatContainerComponent implements OnInit {
         this.currentUser = data.data.find((user:any) => user._id === stoget.id)
       }
     })
-
     this.MessageService.onMessage().subscribe((data: { sender: string;message: string })=>{
+      // this.MessageService.Notifications.next(data)
       const stoget =this.MessageService.getStorage()
         if (data.sender == this.roomId) {          
           this.selectedUser.message.push({
@@ -66,11 +73,11 @@ export class ChatContainerComponent implements OnInit {
       "message":this.messageText
     })
     a.subscribe(data=>{
-      console.log(data);
+      const sendMessage = data.data
+      this.MessageService.sendNotification(sendMessage)
     })
     this.selectedUser.message.push({ fromSelf: true, message:this.messageText,sender:this.currentUser._id,time_send:this.time})
     this.messageText = ''
-    // this.mydiv.nativeElement.scrollTop=this.mydiv.nativeElement.scrollHeight  
     setTimeout(()=>{ this.mydiv.nativeElement.scrollTop=this.mydiv.nativeElement.scrollHeight   },1)
   }
 }

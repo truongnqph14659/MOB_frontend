@@ -63,6 +63,20 @@
   color: #999;
   font-size: 13px;
 }
+.selectedUser{
+  position: relative;
+    display: block;
+    top: 197px;
+    text-align: center;
+    padding: 20px;
+    display: flex;
+    /* border-radius:; */
+}
+.selectedUser .avatar{
+  width: 70px;
+  height: 60px;
+  background: red;
+}
 @media only screen and (max-width: 767px) {
   .chat-app .people-list {
     height: 465px;
