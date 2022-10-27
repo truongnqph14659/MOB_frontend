@@ -129,6 +129,7 @@ export class RegisterComponent implements OnInit {
            this.http.createHost(dataHost).subscribe(
               result => {
                 setTimeout(()=>{
+                  this.reactiveForm.reset()
                   this.spiner.hide()
                   this.toastr.success({detail:"Success",summary:'đăng ký tài khoản thành công!',duration:2000})
                   setTimeout(()=>{

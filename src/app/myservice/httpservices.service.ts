@@ -25,24 +25,28 @@ export class HttpservicesService {
     return this.httpRequests.post<any[]>(CLOUDINARY_API,formData)
   }
   
+  getSupplement():Observable<any[]>{
+    return this.httpRequests.get<any[]>(`${this.API}/suplements`)
+  }
+  getSleepingPlaces():Observable<any[]>{
+    return this.httpRequests.get<any[]>(`${this.API}/sleeping`)
+  }
+  getCategorys():Observable<any[]>{
+    return this.httpRequests.get<any[]>(`${this.API}/listCategory`)
+  }
+  getSupplements(listIdSupplements:any):Observable<any[]>{
+    return this.httpRequests.post<any[]>(`${this.API}/getsupplements`,listIdSupplements)
+  }
+  getSleepById(listIdSleeping:any):Observable<any[]>{
+    return this.httpRequests.post<any[]>(`${this.API}/sleepingplaces`,listIdSleeping)
+  }
+  getBathrooms():Observable<any[]>{
+    return this.httpRequests.get<any[]>(`${this.API}/bathrooms`)
+  }
+  getBathroomById(listIdBath:any):Observable<any[]>{
+    return this.httpRequests.post<any[]>(`${this.API}/bathrooms`,listIdBath)
+  }
+  createPro(dataPro:any):Observable<any[]>{
+    return this.httpRequests.post<any[]>(`${this.API}/addProduct`,dataPro)
+  }
 }
-// export const uploadFile = async (file) => {
-// 	const CLOUDINARY_NAME = "truongnqph14659"
-// 	const CLOUDINARY_API = `https://api.cloudinary.com/v1_1/${CLOUDINARY_NAME}/image/upload`
-// 	const CLOUDINARY_PRESET = "tvgpmy7n"
-// 	const formData = new FormData()
-// 	formData.append("file", file)
-// 	formData.append("upload_preset", CLOUDINARY_PRESET)
-// 	// const data = await fetch(CLOUDINARY_API, {
-// 	// 	method: "POST",
-// 	// 	body: formData,
-// 	// })
-// 	// const data_res = await data.json()
-
-// 	// return data_res
-// 	return axios({
-// 		method: "post",
-// 		url: CLOUDINARY_API,
-// 		data: formData,
-// 	})
-// }
