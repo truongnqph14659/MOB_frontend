@@ -77,6 +77,9 @@
   height: 60px;
   background: red;
 }
+.status .online{
+  color: green  ;
+}
 @media only screen and (max-width: 767px) {
   .chat-app .people-list {
     height: 465px;

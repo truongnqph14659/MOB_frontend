@@ -12,14 +12,13 @@ export class ContactComponent implements OnInit {
   public messageText: string=''; 
   public messageArray: { fromSelf: boolean; message: string,sender:string}[] = [];
   public selectedIdUser:string = '0'
-  public nameUser = ''
   public showScreen = false;
   public currentUser:any; 
   public selectedUser:any;
   constructor(private MessageService:MessageService) { }
   public listUser:any = [{}]
   public filterUser:any
-  private list:any
+  public statusUser:String = 'false'
   ngOnInit(): void {
     const getAll = this.MessageService.getAll()
     getAll.subscribe((data:any)=>{
@@ -28,11 +27,16 @@ export class ContactComponent implements OnInit {
         this.currentUser = data.data.find((user:any) => user._id === stoget.id)
         // this.listUser = data.data.filter((user:any) => user._id !== stoget.id && user.role == 0)
         this.listUser = data.data.filter((user:any) => user._id !== stoget.id)
-        this.MessageService.nameUser.next(this.currentUser.name)
+        this.MessageService.onStatusUser().subscribe((data)=>{
+          if (data) {
+            this.listUser.find((item:any)=>item._id == data.data._id?item.status =data.data.status:'')
+          }
+        })
+        //status
         this.MessageService.getMessage().subscribe(data=>{
           const listSend = data.data.filter((item:any)=>{
             return item.send === this.currentUser._id ||  item.sendTo === this.currentUser._id&&item.send
-          })
+          })          
           const s = data.data.filter((item:any)=>{
             return item.sendTo === this.currentUser._id&&item.send
           })
@@ -53,9 +57,8 @@ export class ContactComponent implements OnInit {
       this.MessageService.idUserSlected.next(this.selectedIdUser)
       const message = this.MessageService.getMessage().subscribe(data=>{
         const responsevice = data.data
-        //status
-          const status = responsevice.filter((item:any)=>item.status == false&&item.user.includes(this.selectedUser._id)&&item.user.includes(this.currentUser._id))
-          console.log('status',status); 
+        //check status
+        const status = responsevice.filter((item:any)=>item.status == false&&item.user.includes(this.selectedUser._id)&&item.user.includes(this.currentUser._id))
          if (status.length !== 0) {
           this.MessageService.sendStatus(status)  
           this.MessageService.statusMessage(status).subscribe((data:any)=>{
