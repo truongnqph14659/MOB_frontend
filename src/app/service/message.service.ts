@@ -12,13 +12,14 @@ export class MessageService {
   private socket: Socket;
   constructor(private httpRequests:HttpClient) {
     this.socket = io(this.url, {transports: ['websocket', 'polling', 'flashsocket']})
-   }
+  }
   public text = new BehaviorSubject<any>({})
   public nameUser = new BehaviorSubject<String>('')
   public Notifications =new BehaviorSubject<any>({})
   public ListUser:any = [{}]
   public content:any
   public idUserSlected = new BehaviorSubject<String>('') 
+  public a =new BehaviorSubject<any>({})
   getAll(){
     return this.httpRequests.get<any>(`${this.API}/getUser`)
   }
@@ -82,6 +83,31 @@ export class MessageService {
   Notification(): Observable<any>{
     return new Observable<any>(observer => {
       this.socket.on('Notification', (data) => {
+        console.log('this.a',this.a); 
+        observer.next(data);
+      });
+    });
+  }
+  //status User
+  statusUser(id:String):Observable<any>{
+    const data = {
+      _id:id,
+      status:"true"
+    } 
+    this.socket.emit('statusUser',data)
+    return this.httpRequests.put<any>(`http://localhost:8080/api/statusUser/${id}`,data)
+  }
+  lougout(id:String):Observable<any>{
+    const data = {
+      _id:id,
+      status:"false"
+    } 
+    this.socket.emit('disconnectUser',data)
+    return this.httpRequests.put<any>(`http://localhost:8080/api/statusUser/${id}`,data)
+  }
+  onStatusUser(): Observable<any>{
+    return new Observable<any>(observer => {
+      this.socket.on('activeStatus', (data) => {
         observer.next(data);
       });
     });
