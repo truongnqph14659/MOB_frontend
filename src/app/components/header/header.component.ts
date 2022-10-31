@@ -2,6 +2,7 @@ import { HttpservicesService } from 'src/app/myservice/httpservices.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MessageService } from 'src/app/service/message.service';
 import { ContactComponent } from '../admin/message/contact/contact.component';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -10,6 +11,7 @@ import { ContactComponent } from '../admin/message/contact/contact.component';
 export class HeaderComponent implements OnInit {
   @ViewChild('nav') nav: any;
   constructor(private MessageService: MessageService,private http:HttpservicesService) {}
+  constructor(private MessageService: MessageService,private router:Router) {}
   public waitingMessage: any
   public content:String =''
   public responsevice:any={}
@@ -18,15 +20,37 @@ export class HeaderComponent implements OnInit {
   public idUserSelecter:String = ''
   public orderList:any[]=[]
   ngOnInit(): void {
+  public currentUserId:any
+  public current:any
+  ngOnInit(): void {    
+    if (this.MessageService.getStorage()) {
+      this.nameUser =this.MessageService.getStorage().name
+      this.currentUserId = this.MessageService.getStorage().id
+      //status User
+      this.MessageService.getAll().subscribe((data:any)=>{
+        this.current = data.data.find((item:any)=> item._id == this.currentUserId)
+        if (this.current.status == "false") {
+          this.MessageService.statusUser(this.currentUserId).subscribe((data)=>{
+            if (data) {
+              console.log(data);
+            }
+          })
+        }
+      })
+    }
     this.MessageService.idUserSlected.subscribe((data:any)=>{
       if (data!=='') {
        this.idUserSelecter = data
       }
     })
-    this.MessageService.nameUser.subscribe((data)=>{
-      if (data) {
-        this.nameUser = data
-      }
+    this.MessageService.getMessage().subscribe((data:any)=>{
+      const datas = data.data.filter((item:any)=>{
+        return item.sendTo === this.currentUserId&&item.send
+      })
+      this.MessageService.getAll().subscribe((data)=>{
+        this.userSend = Object.values(data.data)
+      })
+      this.waitingMessage = Object.values(datas).filter((item:any)=>item.status == false)
     })
     this.MessageService.Notifications.subscribe((data:any)=>{
       this.MessageService.getAll().subscribe((data)=>{
@@ -35,7 +59,6 @@ export class HeaderComponent implements OnInit {
       this.waitingMessage = Object.values(data).filter((item:any)=>item.status == false)
     })
     this.MessageService.onStatusMessage().subscribe((data:any)=>{
-      let c:any
       const map = new Map()
       data.data.idMessage.forEach((item:any) => {
         map.set(item,item)
@@ -73,6 +96,19 @@ export class HeaderComponent implements OnInit {
         notice?.classList.remove('active');
       }
     messege.classList.toggle('active')
+    const table = document.querySelector('.dropdown-menu');
+    const dropdown = document.querySelector<HTMLElement>('.dropdown-menu a')
+    if (table?.classList.contains('active')) {
+      table?.classList.remove('active');
+    } else {
+      table?.classList.add('active');
+      if (dropdown.children.length > 4) {
+        dropdown.style.overflowY = "scroll";
+        dropdown.style.overflowY = "scroll";
+        dropdown.style.height = "325px";
+        dropdown.style.display = "block";
+      }
+    }
   }
   noticeClickHandler(){
     const messege = document.querySelector('.dro-menu-messege');
@@ -81,5 +117,19 @@ export class HeaderComponent implements OnInit {
       messege?.classList.remove('active');
     }
     notice.classList.toggle('active')
+  }
+  a(){
+    console.log('a');
+    
+  }
+  logout(){
+    localStorage.clear();
+    if (this.MessageService.getStorage()=='') {
+        this.MessageService.lougout(this.currentUserId).subscribe((data)=>{
+          if (data) {
+            this.router.navigate(['/'])
+          }
+        })
+    }    
   }
 }

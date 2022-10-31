@@ -20,3 +20,16 @@
 .text-sm {
   color: rgb(39, 36, 36);
 }
+.text-sm{
+    color: rgb(39, 36, 36);
+}
+.dropdown-menu{
+    scrollbar-width: none;
+}
+.dropdown-menu a::-webkit-scrollbar {
+    display: none;
+}
+.font-weight-light{
+    margin-left: 20px;
+    padding-left: 29px;
+}
