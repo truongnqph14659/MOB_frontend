@@ -1,13 +1,21 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
-
+import { io, Socket } from 'socket.io-client';
+import { BehaviorSubject } from 'rxjs';
 @Injectable({
   providedIn: 'root'
 })
 export class HttpservicesService {
-
-  constructor(private httpRequests:HttpClient) { }
+  private socket: Socket;
+  public ListOrders = new BehaviorSubject<any>({}) 
+  public url = 'http://localhost:8080'
+  constructor(private httpRequests:HttpClient) { 
+    this.socket = io(this.url, {transports: ['websocket', 'polling', 'flashsocket']})
+    if(localStorage.getItem('host')){
+      this.socket.emit('hostIp',JSON.parse(localStorage.getItem('host')).id)
+    }
+  }
   API = 'http://localhost:8080/api'
   createHost(dataHost:any):Observable<any[]>{
     return this.httpRequests.post<any[]>(`${this.API}/host/signup`,dataHost)
@@ -48,5 +56,37 @@ export class HttpservicesService {
   }
   createPro(dataPro:any):Observable<any[]>{
     return this.httpRequests.post<any[]>(`${this.API}/addProduct`,dataPro)
+  }
+  listOrder(dataHost:any):Observable<any[]>{
+    return this.httpRequests.post<any[]>(`${this.API}/order`,dataHost)
+  }
+  updateOrder(data:any):Observable<any[]>{
+    return this.httpRequests.patch<any[]>(`${this.API}/order/${data.id}`,data)
+  }
+  listOrderNotSeem(data:any):Observable<any[]>{
+    return this.httpRequests.post<any[]>(`${this.API}/oderseem`,data)
+  }
+  connectIpHost(){
+     this.socket.emit('hostIp',JSON.parse(localStorage.getItem('host')).id)
+  }
+  sendOrder(data:any){
+    this.socket.emit('sendorder',data)
+  }
+  NotificationOrder(): Observable<any>{
+    return new Observable<any>(observer => {
+      this.socket.on('orderresponse', (data) => {
+          observer.next(data);
+      });
+    });
+  }
+
+  sendConfirm(data:any){
+    this.socket.emit('confirmOrder',data)
+  }
+  sendCancel(data:any){
+    this.socket.emit('cancelOrder',data)
+  }
+  createOrderFake(data:any):Observable<any[]>{
+    return this.httpRequests.post<any[]>(`${this.API}/addorder`,data)
   }
 }

@@ -41,6 +41,7 @@ export class LoginComponent implements OnInit {
           this.spiner.hide()
           localStorage.setItem('host', JSON.stringify(data))
           this.router.navigate(['/admin'])
+          this.http.connectIpHost()
         },1000)
       },error=>{
         setTimeout(()=>{

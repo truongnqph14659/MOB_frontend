@@ -1,3 +1,4 @@
+import { HttpservicesService } from 'src/app/myservice/httpservices.service';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MessageService } from 'src/app/service/message.service';
 import { ContactComponent } from '../admin/message/contact/contact.component';
@@ -8,6 +9,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./header.component.css'],
 })
 export class HeaderComponent implements OnInit {
+  @ViewChild('nav') nav: any;
+  constructor(private MessageService: MessageService,private http:HttpservicesService) {}
   constructor(private MessageService: MessageService,private router:Router) {}
   public waitingMessage: any
   public content:String =''
@@ -15,6 +18,8 @@ export class HeaderComponent implements OnInit {
   public nameUser:String=''
   public userSend:any
   public idUserSelecter:String = ''
+  public orderList:any[]=[]
+  ngOnInit(): void {
   public currentUserId:any
   public current:any
   ngOnInit(): void {    
@@ -69,9 +74,28 @@ export class HeaderComponent implements OnInit {
         this.waitingMessage = b
       }
     })
+    this.http.ListOrders.subscribe((data:any)=>{
+      this.orderList = this.orderList.filter((item)=>item.IdOder != data.id)
+    })
+    this.http.listOrderNotSeem({id:JSON.parse(localStorage.getItem('host')).id}).subscribe((data:any)=>{
+      this.orderList = data.data
+    })
+
+    this.http.NotificationOrder().subscribe((data:any)=>{
+      this.orderList.push(data)
+    })
+    // this.http.updateNotice().subscribe(data=>{
+    //   this.orderList = this.orderList.filter((item)=>item.IdOder != data.IdOder)
+    // })
   }
 
   clickHanler() {
+    const messege = document.querySelector('.dro-menu-messege');
+    const notice = document.querySelector('.dro-menu-notice');
+    if (notice?.classList.contains('active')) {
+        notice?.classList.remove('active');
+      }
+    messege.classList.toggle('active')
     const table = document.querySelector('.dropdown-menu');
     const dropdown = document.querySelector<HTMLElement>('.dropdown-menu a')
     if (table?.classList.contains('active')) {
@@ -86,8 +110,13 @@ export class HeaderComponent implements OnInit {
       }
     }
   }
-  Notifications() {
-    console.log('1');
+  noticeClickHandler(){
+    const messege = document.querySelector('.dro-menu-messege');
+    const notice = document.querySelector('.dro-menu-notice');
+    if (messege?.classList.contains('active')) {
+      messege?.classList.remove('active');
+    }
+    notice.classList.toggle('active')
   }
   a(){
     console.log('a');
