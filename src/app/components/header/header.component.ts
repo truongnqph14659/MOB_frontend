@@ -10,8 +10,7 @@ import { Router } from '@angular/router';
 })
 export class HeaderComponent implements OnInit {
   @ViewChild('nav') nav: any;
-  constructor(private MessageService: MessageService,private http:HttpservicesService) {}
-  constructor(private MessageService: MessageService,private router:Router) {}
+  constructor(private MessageService: MessageService,private http:HttpservicesService,private router:Router) {}
   public waitingMessage: any
   public content:String =''
   public responsevice:any={}
@@ -19,7 +18,6 @@ export class HeaderComponent implements OnInit {
   public userSend:any
   public idUserSelecter:String = ''
   public orderList:any[]=[]
-  ngOnInit(): void {
   public currentUserId:any
   public current:any
   ngOnInit(): void {    
@@ -90,24 +88,18 @@ export class HeaderComponent implements OnInit {
   }
 
   clickHanler() {
+    const dropdown = document.querySelector<HTMLElement>('.dro-menu-messege a')
     const messege = document.querySelector('.dro-menu-messege');
     const notice = document.querySelector('.dro-menu-notice');
     if (notice?.classList.contains('active')) {
-        notice?.classList.remove('active');
-      }
+      notice?.classList.remove('active');
+    }
     messege.classList.toggle('active')
-    const table = document.querySelector('.dropdown-menu');
-    const dropdown = document.querySelector<HTMLElement>('.dropdown-menu a')
-    if (table?.classList.contains('active')) {
-      table?.classList.remove('active');
-    } else {
-      table?.classList.add('active');
-      if (dropdown.children.length > 4) {
-        dropdown.style.overflowY = "scroll";
-        dropdown.style.overflowY = "scroll";
-        dropdown.style.height = "325px";
-        dropdown.style.display = "block";
-      }
+    if (dropdown.children.length > 4) {
+      dropdown.style.overflowY = "scroll";
+      dropdown.style.overflowY = "scroll";
+      dropdown.style.height = "325px";
+      dropdown.style.display = "block";
     }
   }
   noticeClickHandler(){
