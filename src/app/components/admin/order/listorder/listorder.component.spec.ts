@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StatisticalComponent } from './statistical.component';
+import { ListorderComponent } from './listorder.component';
 
-describe('StatisticalComponent', () => {
-  let component: StatisticalComponent;
-  let fixture: ComponentFixture<StatisticalComponent>;
+describe('ListorderComponent', () => {
+  let component: ListorderComponent;
+  let fixture: ComponentFixture<ListorderComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ StatisticalComponent ]
+      declarations: [ ListorderComponent ]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(StatisticalComponent);
+    fixture = TestBed.createComponent(ListorderComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
