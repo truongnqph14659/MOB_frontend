@@ -1,31 +1,65 @@
-import { NgModule } from '@angular/core';
-import { BrowserModule } from '@angular/platform-browser';
 
+import { HttpClientModule } from '@angular/common/http';
+import { CUSTOM_ELEMENTS_SCHEMA,NgModule} from '@angular/core';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { LoginpageComponent } from './components/loginpage/loginpage.component';
-import { HomeadminComponent } from './components/admin/homeadmin/homeadmin.component';
-import { AnalyticsComponent } from './components/admin/analytics/analytics.component';
-import { HeaderpageComponent } from './components/admin/headerpage/headerpage.component';
-import { FooterpageComponent } from './components/admin/footerpage/footerpage.component';
-import { SiderbarComponent } from './components/admin/siderbar/siderbar.component';
-import { AdminComponent } from './components/admin/admin.component';
+import { DashboardComponent } from './components/admin/dashboard/dashboard.component';
+import { MessageComponent } from './components/admin/message/message.component';
+import { UserComponent } from './components/admin/user/user.component';
+import { HeaderComponent } from './components/header/header.component';
+import { FooterComponent } from './components/footer/footer.component';
+import { ProductComponent } from './components/admin/product/product.component';
+import { LayoutComponent } from './Page/layout/layout.component';
+import { NotPageComponent } from './Page/not-page/not-page.component';
+import { ContactComponent } from './components/admin/message/contact/contact.component';
+import { ChatContainerComponent } from './components/admin/message/chat-container/chat-container.component';
+import { LoginComponent } from './Page/login/login.component';
+import { RegisterComponent } from './Page/register/register.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import {NgToastModule} from 'ng-angular-popup'
+import { NgParticlesModule } from "ng-particles";
+import { NgxSpinnerModule } from "ngx-spinner";
+import { CreateComponent } from './components/admin/product/createproducts/create/create.component';
+import { ListComponent } from './components/admin/product/createproducts/list/list.component';
+import { ListorderComponent } from './components/admin/order/listorder/listorder.component'
+
 
 @NgModule({
   declarations: [
     AppComponent,
-    LoginpageComponent,
-    HomeadminComponent,
-    AnalyticsComponent,
-    HeaderpageComponent,
-    FooterpageComponent,
-    SiderbarComponent,
-    AdminComponent
+    DashboardComponent,
+    MessageComponent,
+    UserComponent,
+    HeaderComponent,
+    FooterComponent,
+    ProductComponent,
+    LayoutComponent,
+    NotPageComponent,
+    ContactComponent,
+    ChatContainerComponent,
+    LoginComponent,
+    RegisterComponent,
+    ListComponent,
+    RegisterComponent,
+    CreateComponent,
+    ListorderComponent,
+    
   ],
   imports: [
     BrowserModule,
-    AppRoutingModule
+    ReactiveFormsModule,
+    AppRoutingModule,
+    NgToastModule,
+    NgParticlesModule,
+    HttpClientModule,
+    NgxSpinnerModule,
+    BrowserAnimationsModule,
+    FormsModule
   ],
+
+  schemas: [CUSTOM_ELEMENTS_SCHEMA],
   providers: [],
   bootstrap: [AppComponent]
 })
