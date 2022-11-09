@@ -9,14 +9,14 @@ import { BehaviorSubject } from 'rxjs';
 export class HttpservicesService {
   private socket: Socket;
   public ListOrders = new BehaviorSubject<any>({}) 
-  public url = 'http://localhost:8080'
+  public url = 'https://m91nnl-8080.preview.csb.app'
   constructor(private httpRequests:HttpClient) { 
     this.socket = io(this.url, {transports: ['websocket', 'polling', 'flashsocket']})
     if(localStorage.getItem('host')){
       this.socket.emit('hostIp',JSON.parse(localStorage.getItem('host')).id)
     }
   }
-  API = 'http://localhost:8080/api'
+  API = 'https://m91nnl-8080.preview.csb.app/api'
   createHost(dataHost:any):Observable<any[]>{
     return this.httpRequests.post<any[]>(`${this.API}/host/signup`,dataHost)
   }
