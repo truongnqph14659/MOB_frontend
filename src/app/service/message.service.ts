@@ -7,8 +7,8 @@ import { io, Socket } from 'socket.io-client';
   providedIn: 'root'
 })
 export class MessageService {
-  API = 'http://localhost:8080/api/Message'
-  public url = 'http://localhost:8080/';
+  API = 'https://m91nnl-8080.preview.csb.app/api/Message'
+  public url = 'https://m91nnl-8080.preview.csb.app/';
   private socket: Socket;
   constructor(private httpRequests:HttpClient) {
     this.socket = io(this.url, {transports: ['websocket', 'polling', 'flashsocket']})
@@ -47,7 +47,7 @@ export class MessageService {
     
   }
   sendMessageDB(data:any):Observable<any>{
-    return this.httpRequests.post<any>('http://localhost:8080/api/Message/addmsg',data)
+    return this.httpRequests.post<any>('https://m91nnl-8080.preview.csb.app/api/Message/addmsg',data)
   }
   joinRoom(id:any){
     this.socket.emit('join', id);
@@ -75,7 +75,7 @@ export class MessageService {
     this.socket.emit('statusMesage',datas)
   }
   statusMessage(data:any):Observable<any>{
-   return this.httpRequests.post<any>('http://localhost:8080/api/Message/statusMessage',data)
+   return this.httpRequests.post<any>('https://m91nnl-8080.preview.csb.app/api/Message/statusMessage',data)
   }
   sendNotification(data:any){
     this.socket.emit('sendNotification',data)
@@ -95,7 +95,7 @@ export class MessageService {
       status:"true"
     } 
     this.socket.emit('statusUser',data)
-    return this.httpRequests.put<any>(`http://localhost:8080/api/statusUser/${id}`,data)
+    return this.httpRequests.put<any>(`https://m91nnl-8080.preview.csb.app/api/statusUser/${id}`,data)
   }
   lougout(id:String):Observable<any>{
     const data = {
@@ -103,7 +103,7 @@ export class MessageService {
       status:"false"
     } 
     this.socket.emit('disconnectUser',data)
-    return this.httpRequests.put<any>(`http://localhost:8080/api/statusUser/${id}`,data)
+    return this.httpRequests.put<any>(`https://m91nnl-8080.preview.csb.app/api/statusUser/${id}`,data)
   }
   onStatusUser(): Observable<any>{
     return new Observable<any>(observer => {
