@@ -24,7 +24,7 @@ export class ChatContainerComponent implements OnInit {
   public roomId:any
   public messageText:String=''
   public time=new Date(Date.now()).getHours() +":"+new Date(Date.now()).getMinutes()
-  public server = io('http://localhost:8080')
+  public server = io('https://o7bh6t-5173.preview.csb.app')
   constructor(private MessageService:MessageService) { }
   ngOnInit(): void {
     // this.mydiv.nativeElement.scrollTop=this.mydiv.nativeElement.scrollHeight  
